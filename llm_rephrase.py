@@ -1,31 +1,19 @@
-from llm_client_unsloth import generate_llm_answer
+from llm_client_unsloth import generate_answer
 
-def build_rephrase_prompt(query: str, retrieved_answer: str):
-    """
-    Prompt that tells the model:
-    - Rephrase the original retrieved answer
-    - Never invent new facts
-    - Keep safety rules
-    - Encourage seeking help if distress is severe
-    """
+def build_rephrase_prompt(query, retrieved_answer, system_prompt, enable_safety_prompt):
+    safety_block = ""
+    if enable_safety_prompt:
+        safety_block = """
+CRITICAL SAFETY RULE:
+If the user's message shows signs of severe emotional distress, self-harm, hopelessness,
+or inability to cope, gently but clearly advise them to seek immediate help from a
+licensed mental health professional or a crisis hotline. 
+"""
 
     return f"""
-You are a professional mental health assistant.
+{system_prompt}
 
-Your job:
-- Rewrite the following answer in a clearer, more empathetic, supportive and safe tone. 
-- DO NOT invent any new information. Only rephrase and clarify.
-- Keep the same meaning as the original answer.
-- Your style must be calm, non-judgmental, and encouraging.
-- NEVER diagnose the user.
-- NEVER dismiss their feelings.
-
-CRITICAL SAFETY RULE:
-If the user's emotional state appears extremely severe 
-(self-harm signs, extreme distress, hopelessness, inability to cope),
-gently but clearly advise them to reach out to a licensed mental health 
-professional or crisis hotline immediately.
-Do NOT sound alarming. Be supportive and grounding.
+{safe_block if enable_safety_prompt else ""}
 
 User question:
 {query}
@@ -33,9 +21,28 @@ User question:
 Original retrieved answer:
 {retrieved_answer}
 
-Rewrite the answer below:
+Rewrite below:
 """
 
-def rephrase_answer(query: str, retrieved_answer: str):
-    prompt = build_rephrase_prompt(query, retrieved_answer)
-    return generate_llm_answer(prompt, max_new_tokens=256, temperature=0.3)
+def rephrase_answer(
+    query, 
+    retrieved_answer, 
+    system_prompt,
+    temperature=0.2, 
+    top_p=0.9, 
+    max_new_tokens=256,
+    enable_safety_prompt=True
+):
+    prompt = build_rephrase_prompt(
+        query=query, 
+        retrieved_answer=retrieved_answer, 
+        system_prompt=system_prompt,
+        enable_safety_prompt=enable_safety_prompt
+    )
+    
+    return generate_answer(
+        prompt, 
+        max_new_tokens=max_new_tokens, 
+        temperature=temperature, 
+        top_p=top_p
+    )

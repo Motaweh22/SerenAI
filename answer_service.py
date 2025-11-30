@@ -1,34 +1,38 @@
 from retriever import retriever
-from config import (
-    SELFHARM_KEYWORDS, ABUSE_KEYWORDS, MAX_DISPLAY_CHARS
-)
+from config import SELFHARM_KEYWORDS, ABUSE_KEYWORDS, MAX_DISPLAY_CHARS
 from llm_rephrase import rephrase_answer
 
-
 class AnswerService:
-    # -------- Safety --------
+
     def safety_check(self, text):
         t = text.lower()
         if any(k in t for k in SELFHARM_KEYWORDS):
-            return {"level": "high", "reason": "self harm detected"}
+            return {"level": "high", "reason": "self harm"}
         if any(k in t for k in ABUSE_KEYWORDS):
-            return {"level": "medium", "reason": "abuse detected"}
+            return {"level": "medium", "reason": "abuse"}
         return {"level": "ok", "reason": ""}
 
-    # -------- Extract Response --------
     def extract_response(self, pair_text):
         if "Response:" in pair_text:
             return pair_text.split("Response:",1)[1].strip()
         return pair_text.strip()
 
-    # -------- Clean --------
     def clean(self, text):
-        s = " ".join(text.split())
-        return s if len(s) <= MAX_DISPLAY_CHARS else s[:MAX_DISPLAY_CHARS] + "..."
+        text = " ".join(text.split())
+        return text if len(text) <= MAX_DISPLAY_CHARS else text[:MAX_DISPLAY_CHARS] + "..."
 
-    # -------- Pipeline --------
-    def answer(self, query, k=5, use_llm=True):
-        # 1) retrieve top-k pair chunks
+    def answer(
+        self, 
+        query, 
+        k=5, 
+        use_llm=True, 
+        system_prompt="You are a helpful mental health AI.",
+        temperature=0.2,
+        top_p=0.9,
+        max_new_tokens=256,
+        enable_safety_prompt=True,
+    ):
+
         candidates = retriever.retrieve(query, k)
 
         processed = []
@@ -44,25 +48,27 @@ class AnswerService:
                 "safety": safe
             })
 
-        # 2) best candidate
-        best = processed[0] if processed else None
-        if not best:
-            return {"error": "no_response_available"}
-
-        # 3) LLM rephrase layer
+        best = processed[0]
+        
         if use_llm:
-            rephrased = rephrase_answer(query, best["raw_response"])
+            llm_ans = rephrase_answer(
+                query=query,
+                retrieved_answer=best["raw_response"],
+                system_prompt=system_prompt,
+                temperature=temperature,
+                top_p=top_p,
+                max_new_tokens=max_new_tokens,
+                enable_safety_prompt=enable_safety_prompt
+            )
         else:
-            rephrased = best["cleaned_response"]
+            llm_ans = best["cleaned_response"]
 
-        # 4) Final output
         return {
             "query": query,
             "retrieved_answer": best["cleaned_response"],
-            "llm_answer": rephrased,
+            "llm_answer": llm_ans,
             "safety": best["safety"],
             "candidates": processed
         }
-
 
 answer_service = AnswerService()
