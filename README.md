@@ -10,13 +10,10 @@
 
 ## 🎥 Demo Video
 
-### ▶️ Inline Playback
+### ▶️ Detailed Walkthrough
 
 
-<video width="600" controls>
-  <source src="demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/6b2c7aed-276d-4cd6-9819-7d913bf6b6c9
 
 ### 🔗 Direct Link
 
