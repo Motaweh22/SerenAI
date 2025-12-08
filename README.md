@@ -12,9 +12,8 @@
 
 ### ▶️ Inline Playback
 
-```html
+
 [![Watch the Demo](https://img.icons8.com/?size=512&id=86188&format=png)](demo.mp4)
-```
 
 ### 🔗 Direct Link
 
