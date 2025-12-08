@@ -1,7 +1,3 @@
-# 📘 **README.md — Mental Health RAG System**
-
----
-
 # 🧠 Mental Health RAG (Retrieval-Augmented Generation) System
 
 *A safe, empathetic AI assistant designed to support users by retrieving real therapist advice instead of hallucinating.*
