@@ -13,7 +13,10 @@
 ### ▶️ Inline Playback
 
 
-[![Watch the Demo](https://img.icons8.com/?size=512&id=86188&format=png)](demo.mp4)
+<video width="600" controls>
+  <source src="demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ### 🔗 Direct Link
 
