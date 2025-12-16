@@ -169,6 +169,92 @@ MRR        ≈ 0.95+
 
 Our final system achieved strong grounding and minimal hallucination.
 
+
+---
+
+## 🎙️ Voice Interaction (Speech-to-Text & Text-to-Speech)
+
+The system supports **full voice-based interaction**, allowing users to communicate with the assistant naturally using speech instead of text.
+
+### 🔊 Voice Input — Speech-to-Text (STT)
+
+* Implemented using **OpenAI Whisper (tiny)**
+* Converts user speech into text before entering the RAG pipeline
+* Chosen because it is:
+
+  * Lightweight and fast
+  * Accurate enough for conversational input
+  * Suitable for real-time demos and low-resource environments
+
+**Flow:**
+
+```
+User Voice → Whisper (tiny) → Text Query
+```
+
+Users can:
+
+* Record directly from the microphone
+* Upload pre-recorded audio files (wav / mp3 / m4a)
+
+---
+
+### 🔈 Voice Output — Text-to-Speech (TTS)
+
+* Implemented using **Microsoft Edge Text-to-Speech**
+* Converts the final assistant response into natural-sounding speech
+* Advantages:
+
+  * Neural-quality voices
+  * Low latency
+  * Works locally without paid APIs
+  * Ideal for Streamlit and Colab environments
+
+**Flow:**
+
+```
+Final Text Answer → Edge TTS → Audio Response
+```
+
+---
+
+### 🧠 Voice in the Full RAG Pipeline
+
+The voice features are **fully integrated** into the existing RAG architecture:
+
+```
+User Voice
+   ↓
+Whisper (tiny)
+   ↓
+Text Query
+   ↓
+MPNet Embeddings
+   ↓
+FAISS Retrieval
+   ↓
+Retrieved Therapist Answer
+   ↓
+LLM Rephrase + Safety Prompt
+   ↓
+Final Safe Answer
+   ↓
+Edge Text-to-Speech
+   ↓
+Spoken Response
+```
+
+---
+
+### 🎯 Why Voice Matters in Mental Health Applications
+
+* Lowers the barrier for users who struggle with typing
+* Feels more natural and supportive
+* Improves accessibility
+* Better suited for emotionally sensitive interactions
+
+---
+
 ---
 
 ## 🧪 How to Run
