@@ -9,7 +9,7 @@
 ### ▶️ Detailed Walkthrough
 
 
-https://github.com/user-attachments/assets/6b2c7aed-276d-4cd6-9819-7d913bf6b6c9
+[https://github.com/user-attachments/assets/6b2c7aed-276d-4cd6-9819-7d913bf6b6c9](https://github.com/user-attachments/assets/3b674370-8ce2-4a82-b14f-70e5f9aeb4f4)
 
 ### 🔗 Direct Link
 
