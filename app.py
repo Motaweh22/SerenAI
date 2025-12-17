@@ -12,7 +12,7 @@ try:
     from voice.stt import speech_to_text      # Whisper tiny
     from voice.tts import text_to_speech      # TTS
 except Exception:
-    st.error("فشل استيراد answer_service أو voice modules.")
+    st.error("importing faild answer_service or voice modules.")
     st.stop()
 
 # -------------------------
@@ -49,8 +49,7 @@ with st.sidebar:
     )
 
     st.caption(
-        "ℹ️ Model switching is UI-only. "
-        "Backend currently runs a single preloaded model."
+        "ℹ️ Model switching "
     )
 
     system_prompt = st.text_area(
@@ -74,7 +73,7 @@ with st.sidebar:
     use_voice_output = st.checkbox("🔊 Voice Output", value=True)
 
     st.markdown("---")
-    st.caption("Tip: استخدم الإعدادات بعناية عند اختبار الأداء أو التكلفة.")
+    st.caption("Tip: Use the settings carefully when testing performance or cost.")
 
 # -------------------------
 # Main Input Section
